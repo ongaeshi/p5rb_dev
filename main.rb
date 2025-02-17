@@ -1,18 +1,17 @@
+# https://gainenz.com/2021/05/spirograph/
+
 def setup
-  createCanvas(710, 400)
+  createCanvas(640, 480)
+  frameRate(20)
+  background(255)
 end
 
-def draw
-  background(100, 150, 200)
-  
-  noFill()
-  stroke(255, 204, 0)
-  strokeWeight(3)
+@r = 10
+@theta = 0
 
-  (0..10).each do |i|
-    translate(width / 2, height / 2)
-    rotate(frameCount * 0.01)
-    translate(-width / 2, -height / 2)
-    ellipse(355, 200, 150 - i * 10, 200 - i * 20)
-  end
+def draw
+  @theta += 10
+  @r += 1
+  line(@r * cos(radians(@theta)) + width / 2, @r * sin(radians(@theta)) + height / 2,
+       @r * cos(radians(@theta) * 1.05) + width / 2, @r * sin(radians(@theta) * 1.05) + height / 2)
 end
