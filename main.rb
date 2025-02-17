@@ -1,21 +1,20 @@
+# p5.rb のソースコードです。
+# p5.rb は p5.js の Ruby 版です。メソッド名や引数は p5.js と同じです。
+
 def setup
-  createCanvas(800, 800)
-  colorMode(HSB, 360, 100, 100)
+  createCanvas(400, 400)
   background(255)
 end
 
 def draw
-  background(255)
+  stroke(0)
+  line(0, 0, width, height)
+  fill(150)
+  ellipse(200, 200, 50, 50)
 
-  (0..20).each do |i|
-    (0..20).each do |j|
-      fill((i * 18 + j * 18) % 360, 50, 100) # Pastel colors
-      rect(i * 40, j * 40, 40, 40)
-    end
-  end
+  fill(100)
+  rect(50, 50, 100, 100)
 
-  (0..10).each do |i|
-    fill((i * 36) % 360, 50, 100) # Pastel colors
-    ellipse(width / 2, height / 2, i * 50, i * 50)
-  end
+  fill(200)
+  triangle(300, 100, 350, 200, 250, 200)
 end
