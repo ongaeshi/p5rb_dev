@@ -3,18 +3,21 @@
 
 def setup
   createCanvas(400, 400)
-  background(255)
+  colorMode(HSB, 360, 100, 100)
 end
 
 def draw
-  stroke(0)
-  line(0, 0, width, height)
-  fill(150)
-  ellipse(200, 200, 50, 50)
+  background(220)
+  cols = 8
+  rows = 8
+  w = width / cols
+  h = height / rows
 
-  fill(100)
-  rect(50, 50, 100, 100)
-
-  fill(200)
-  triangle(300, 100, 350, 200, 250, 200)
+  (0...cols).each do |i|
+    (0...rows).each do |j|
+      hue = map(i + j, 0, cols + rows - 2, 0, 360)
+      fill(hue, 50, 100) # Change saturation to 50 for lighter colors
+      rect(i * w, j * h, w, h)
+    end
+  end
 end
