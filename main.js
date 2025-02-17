@@ -28,9 +28,7 @@ const main = async () => {
 
   vm.printVersion();
 
-  document.getElementById("run").onclick = async () => {
-    await runScript();
-  };
+  document.getElementById("run").onclick = runScript;
 
   runScript();
 };
