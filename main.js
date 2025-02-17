@@ -17,16 +17,17 @@ const main = async () => {
   );
   const buffer = await response.arrayBuffer();
   const module = await WebAssembly.compile(buffer);
-  const { vm } = await DefaultRubyVM(module);
+  // const { vm } = await DefaultRubyVM(module);
 
-  globalData.vm = vm;
+  globalData.module = module;
+  // globalData.vm = vm;
 
-  const p5rb = await fetch("p5.rb");
-  const t = await p5rb.text();
+  // const p5rb = await fetch("p5.rb");
+  // const t = await p5rb.text();
 
-  vm.eval(t);
+  // vm.eval(t);
 
-  vm.printVersion();
+  // vm.printVersion();
 
   document.getElementById("run").onclick = runScript;
 
@@ -36,14 +37,20 @@ const main = async () => {
 main();
 
 const runScript = async () => {
-  // Rewrite URL
-  const vm = globalData.vm;
+  const { vm } = await DefaultRubyVM(globalData.module);
+  globalData.vm = vm;
+
+  {
+    const p5rb = await fetch("p5.rb");
+    const t = await p5rb.text();
+    vm.eval(t);
+  }
+
   document.getElementById("error-console").value = "";
 
-  const p5rb = await fetch("main.rb");
-  const t = await p5rb.text();
-
   try {
+    const main = await fetch("main.rb");
+    const t = await main.text();
     vm.eval(t);
   } catch (e) {
     document.getElementById("error-console").value += e.message + "\n"

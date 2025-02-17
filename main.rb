@@ -3,22 +3,16 @@ def setup
 end
 
 def draw
-  background(100, 153, 0)
+  background(100, 150, 200)
   
-  translate(width / 2, height / 2)
-  rotate(frameCount * 0.01)
-  translate(-width / 2, -height / 2)
-  
-  # Draw face
-  fill(255, 224, 189)
-  ellipse(355, 200, 150, 200)
-
-  # Draw eyes
-  fill(0)
-  ellipse(330, 180, 20, 20)
-  ellipse(380, 180, 20, 20)
-
-  # Draw mouth
   noFill()
-  arc(355, 240, 50, 30, 0, PI)
+  stroke(255, 204, 0)
+  strokeWeight(3)
+
+  (0..10).each do |i|
+    translate(width / 2, height / 2)
+    rotate(frameCount * 0.01)
+    translate(-width / 2, -height / 2)
+    ellipse(355, 200, 150 - i * 10, 200 - i * 20)
+  end
 end
