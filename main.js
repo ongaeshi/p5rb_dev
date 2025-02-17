@@ -4,35 +4,9 @@ const { DefaultRubyVM } = window["ruby-wasm-wasi"];
 const globalData = {};
 let myP5 = null;
 
-const codeEditor = CodeMirror.fromTextArea(
-  document.getElementById("input"),
-  {
-    theme: 'default',
-    mode: "text/x-ruby",
-    indentUnit: 2,
-    matchBrackets: true,
-    autoCloseBrackets: true,
-    lineNumbers: true
-  }
-);
-
-codeEditor.setOption("extraKeys", {
-  "Ctrl-Enter": function (cm) {
-    runScript()
-  }
-});
-
 const main = async () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const code = urlParams.get('q')
-  if (code !== null) {
-    if (code === "") {
-      codeEditor.setValue("")
-    } else {
-      codeEditor.setValue(LZString.decompressFromEncodedURIComponent(code))
-    }
-  }
 
   // Fetch and instantiate WebAssembly binary
   const response = await fetch(
@@ -54,27 +28,25 @@ const main = async () => {
 
   vm.printVersion();
 
-  document.getElementById("run").onclick = runScript;
-  document.getElementById("clear").onclick = selectAllScripts;
-
-  codeEditor.focus();
+  document.getElementById("run").onclick = async () => {
+    await runScript();
+  };
 
   runScript();
 };
 
 main();
 
-const runScript = () => {
+const runScript = async () => {
   // Rewrite URL
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  urlParams.set("q", LZString.compressToEncodedURIComponent(codeEditor.getValue()))
-  history.replaceState('', '', "?" + urlParams.toString());
   const vm = globalData.vm;
   document.getElementById("error-console").value = "";
 
+  const p5rb = await fetch("main.rb");
+  const t = await p5rb.text();
+
   try {
-    vm.eval(codeEditor.getValue());
+    vm.eval(t);
   } catch (e) {
     document.getElementById("error-console").value += e.message + "\n"
     throw e
@@ -117,7 +89,3 @@ const runScript = () => {
   myP5 = new p5(sketch, 'main');
 }
 
-const selectAllScripts = () => {
-  codeEditor.focus();
-  codeEditor.execCommand("selectAll");
-};
